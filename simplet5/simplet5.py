@@ -9,11 +9,13 @@ from transformers import (
     RobertaTokenizer,
     T5TokenizerFast as T5Tokenizer,
     MT5TokenizerFast as MT5Tokenizer,
+    LongT5ForConditionalGeneration,
+    AutoTokenizer
 )
-from transformers import AutoTokenizer
+
 from torch.optim import AdamW
 from torch.utils.data import Dataset, DataLoader
-from transformers import AutoModelWithLMHead, AutoTokenizer
+from transformers import AutoModelWithLMHead
 import pytorch_lightning as pl
 from pytorch_lightning.loggers import TensorBoardLogger
 from pytorch_lightning.callbacks.early_stopping import EarlyStopping
@@ -317,6 +319,16 @@ class SimpleT5:
             self.model = T5ForConditionalGeneration.from_pretrained(
                 f"{model_name}", return_dict=True
             )
+        elif model_type =="flant5":
+            self.tokenizer = T5Tokenizer.from_pretrained(f"{model_name}")
+            self.model = T5ForConditionalGeneration.from_pretrained(
+                f"{model_name}", return_dict=True
+            )
+        elif model_type =="longt5":
+            self.tokenizer = AutoTokenizer.from_pretrained(f"{model_name}")
+            self.model = LongT5ForConditionalGeneration.from_pretrained(
+                f"{model_name}", return_dict=True
+            )
 
     def train(
         self,
@@ -424,6 +436,12 @@ class SimpleT5:
         elif model_type =="codet5":
             self.model = T5ForConditionalGeneration.from_pretrained(f"{model_dir}")
             self.tokenizer = RobertaTokenizer.from_pretrained(f"{model_dir}")
+        elif model_type =="flant5":
+            self.tokenizer = T5Tokenizer.from_pretrained(f"{model_dir}")
+            self.model = T5ForConditionalGeneration.from_pretrained(f"{model_dir}")
+        elif model_type =="longt5":
+            self.tokenizer = AutoTokenizer.from_pretrained(f"{model_dir}")
+            self.model = LongT5ForConditionalGeneration.from_pretrained(f"{model_dir}")
 
         if use_gpu:
             if torch.cuda.is_available():
