@@ -2,5 +2,5 @@ numpy
 pandas
 sentencepiece
 torch>=1.7.0,!=1.8.0
-transformers
+transformers==4.29.1
 pytorch-lightning==1.5.10
