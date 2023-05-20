@@ -327,6 +327,7 @@ class SimpleT5:
         batch_size: int = 8,
         max_epochs: int = 5,
         use_gpu: bool = True,
+        gpus: list = [0],
         outputdir: str = "outputs",
         early_stopping_patience_epochs: int = 0,  # 0 to disable early stopping feature
         precision=32,
@@ -344,6 +345,7 @@ class SimpleT5:
             batch_size (int, optional): batch size. Defaults to 8.
             max_epochs (int, optional): max number of epochs. Defaults to 5.
             use_gpu (bool, optional): if True, model uses gpu for training. Defaults to True.
+            gpus (list, optional): list of gpus to be used for training. Defualts to 0.
             outputdir (str, optional): output directory to save model checkpoints. Defaults to "outputs".
             early_stopping_patience_epochs (int, optional): monitors val_loss on epoch end and stops training, if val_loss does not improve after the specied number of epochs. set 0 to disable early stopping. Defaults to 0 (disabled)
             precision (int, optional): sets precision training - Double precision (64), full precision (32) or half precision (16). Defaults to 32.
@@ -382,7 +384,7 @@ class SimpleT5:
             callbacks.append(early_stop_callback)
 
         # add gpu support
-        gpus = 1 if use_gpu else 0
+        gpus = gpus if use_gpu else 0
 
         # add logger
         loggers = True if logger == "default" else logger
